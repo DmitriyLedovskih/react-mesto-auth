@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import * as auth from "../auth";
 
-function Login({ handleLogin }) {
+function Login({ handleLogin, setUserEmail }) {
   const [formValue, setFormValue] = React.useState({ email: "", password: "" });
   const navigate = useNavigate();
 
@@ -19,6 +19,7 @@ function Login({ handleLogin }) {
     auth.login(formValue.email, formValue.password).then((res) => {
       if (res.token) {
         setFormValue({ email: "", password: "" });
+        setUserEmail(formValue.email);
         handleLogin();
         navigate("/");
       }

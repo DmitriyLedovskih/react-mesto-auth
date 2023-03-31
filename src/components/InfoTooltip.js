@@ -16,10 +16,14 @@ function InfoTooltip({ isOpen, onClose, onCloseOverlay, isSuccess }) {
         ></button>
         <img
           src={isSuccess ? successIcon : errorIcon}
-          alt=""
+          alt={
+            isSuccess
+              ? "Вы успешно зарегистрировались!"
+              : "Что-то пошло не так! Попробуйте ещё раз."
+          }
           className="popup__container-icon"
         />
-        <h2 className="popup__title popup__title_theme_dark popup__title-bottom">
+        <h2 className="main-title main-title_theme_dark main-title__bottom">
           {isSuccess
             ? "Вы успешно зарегистрировались!"
             : "Что-то пошло не так! Попробуйте ещё раз."}

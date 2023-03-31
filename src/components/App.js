@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import Main from "./Main";
@@ -41,6 +41,19 @@ function App() {
     setLoggedIn(true);
   }
 
+  function handleTokenCheck() {
+    if (localStorage.getItem("token")) {
+      const token = localStorage.getItem("token");
+      auth.checkToken(token).then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          setUserEmail(res.email);
+          navigate("/");
+        }
+      });
+    }
+  }
+
   function handleRegisterSubmit(evt) {
     evt.preventDefault();
     auth
@@ -74,16 +87,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      auth.checkToken(token).then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setUserEmail(res.email);
-          navigate("/");
-        }
-      });
-    }
+    handleTokenCheck();
   }, []);
 
   function closeAllPopups() {
@@ -266,7 +270,9 @@ function App() {
           />
           <Route
             path="/sign-in"
-            element={<Login handleLogin={handleLogin} />}
+            element={
+              <Login handleLogin={handleLogin} setUserEmail={setUserEmail} />
+            }
           />
         </Routes>
         <Footer />

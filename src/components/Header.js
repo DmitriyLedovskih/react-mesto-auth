@@ -7,7 +7,7 @@ function Header({ loggedIn, userEmail, setLoggedIn }) {
   function onClickBurger() {
     setIsVisible(!isVisible);
   }
-  console.log(userEmail);
+
   const navigate = useNavigate();
   function signOut() {
     localStorage.removeItem("token");
