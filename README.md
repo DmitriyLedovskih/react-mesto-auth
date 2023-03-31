@@ -1,6 +1,6 @@
 # "Место на React.js c авторизацией".
 
-[Ссылка на проект](https://dmitriyledovskih.github.io/react-mesto-auth)
+[Ссылка на проект](https://dmitriyledovskih.github.io/react-mesto-auth/sign-in)
 
 ## Описание:
 
