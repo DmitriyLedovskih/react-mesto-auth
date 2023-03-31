@@ -2,7 +2,6 @@ import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import Main from "./Main";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import api from "../utils/Api";
@@ -10,7 +9,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import DeletePlacePopup from "./DeletePlacePopup";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import * as auth from "../auth";
@@ -42,19 +41,6 @@ function App() {
     setLoggedIn(true);
   }
 
-  function handleTokenCheck() {
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      auth.checkToken(token).then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setUserEmail(res.email);
-          navigate("/");
-        }
-      });
-    }
-  }
-
   function handleRegisterSubmit(evt) {
     evt.preventDefault();
     auth
@@ -72,7 +58,6 @@ function App() {
   }
 
   React.useEffect(() => {
-    handleTokenCheck();
     api
       .getProfileInfo()
       .then((result) => {
@@ -89,6 +74,16 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+    if (localStorage.getItem("token")) {
+      const token = localStorage.getItem("token");
+      auth.checkToken(token).then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          setUserEmail(res.email);
+          navigate("/");
+        }
+      });
+    }
   }, []);
 
   function closeAllPopups() {
@@ -144,10 +139,6 @@ function App() {
   function handleDeletePlaceClick(card) {
     setIsDeletePopupOpen(!isDeletePopupOpen);
     setSelectedCard(card);
-  }
-
-  function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(!isInfoPopupOpen);
   }
 
   function handleCardClick(card) {
