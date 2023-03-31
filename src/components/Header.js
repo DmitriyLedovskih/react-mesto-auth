@@ -21,7 +21,7 @@ function Header({ loggedIn, userEmail, setLoggedIn }) {
         <img src={logo} alt="Логотип Место" className="header__logo" />
       </Link>
       {!loggedIn ? (
-        window.location.pathname === "/sign-in" ? (
+        window.location.pathname.includes("/sign-in") ? (
           <Link to="/sign-up" className="header__link">
             Регистрация
           </Link>
