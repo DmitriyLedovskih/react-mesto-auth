@@ -1,0 +1,25 @@
+.main-form__button {
+  width: 100%;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  padding: 16px;
+  font-family: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: opacity .3s;
+  border-radius: 2px;
+  margin-top: auto;
+}
+
+.main-form__button:not(.main-form__button_disabled):hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 560px) {
+  .main-form__button {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}

@@ -1,0 +1,21 @@
+.main-form__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  transition: all .3s;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  padding: 0;
+  min-height: 30px;
+  box-sizing: border-box;
+  background-color: transparent;
+  font-family: inherit;
+}
+
+@media screen and (max-width: 560px) {
+  .main-form__input {
+    min-height: 34px;
+  }
+}

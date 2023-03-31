@@ -1,0 +1,6 @@
+.popup__container-image {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 75vw;
+  max-height: 75vh;
+}

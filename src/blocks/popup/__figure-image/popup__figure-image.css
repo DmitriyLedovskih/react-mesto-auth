@@ -1,0 +1,6 @@
+.popup__figure-image {
+  max-width: 100%;
+  max-height: inherit;
+  object-fit: cover;
+  margin: 0 auto;
+}

@@ -1,0 +1,12 @@
+.main-form__input_theme_light {
+  border-bottom: 2px solid #fff;
+  color: #ccc;
+}
+
+.main-form__input_theme_light:focus {
+  border-bottom-color: #969696;
+}
+
+.main-form__input_theme_light::placeholder {
+  color: #ccc;
+}

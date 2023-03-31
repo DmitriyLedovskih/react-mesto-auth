@@ -1,0 +1,25 @@
+.header__user {
+  display: flex;
+  gap: 24px;
+}
+
+@media screen and (max-width: 560px) {
+  .header__user {
+    max-height: 0;
+    flex-direction: column;
+    gap: 18px;
+    text-align: center;
+    align-items: center;
+    transform: translateY(-50vh);
+    transition: all .4s ease-in-out;
+    width: 100%;
+    border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+    opacity: 0;
+  }
+  .header__user_active {
+    min-height: 100px;
+    transform: translateY(0);
+    margin: 10px 0;
+    opacity: 1;
+  }
+}

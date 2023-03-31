@@ -1,0 +1,5 @@
+.popup__figure {
+  margin: 0;
+  max-height: inherit;
+  display: grid;
+}

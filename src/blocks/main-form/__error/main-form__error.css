@@ -1,0 +1,11 @@
+.main-form__error {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #f00;
+  display: block;
+  margin-top: 5px;
+  min-height: 30px;
+  opacity: 0;
+  transition: .3s;
+}
