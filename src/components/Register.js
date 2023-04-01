@@ -1,11 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Register({
-  formRegisterValue,
-  setFormRegisterValue,
-  onRegisterSubmit,
-}) {
+function Register({ formRegisterValue, setFormRegisterValue, onRegister }) {
   function handleChange(evt) {
     const { name, value } = evt.target;
     setFormRegisterValue({
@@ -19,7 +15,7 @@ function Register({
       <h1 className="auth-page__title main-title main-title_theme_light main-title__top">
         Регистрация
       </h1>
-      <form className="main-form auth-page__form" onSubmit={onRegisterSubmit}>
+      <form className="main-form auth-page__form" onSubmit={onRegister}>
         <label className="main-form__field">
           <input
             type="email"

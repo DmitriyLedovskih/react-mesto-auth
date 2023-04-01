@@ -8,10 +8,7 @@ export function register(email, password) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
-  })
-    .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
-    .then((data) => data)
-    .catch((err) => console.log(err));
+  }).then((res) => (res.ok ? res.json() : Promise.reject(res.status)));
 }
 
 export function login(email, password) {
@@ -29,8 +26,7 @@ export function login(email, password) {
         localStorage.setItem("token", data.token);
         return data;
       }
-    })
-    .catch((err) => console.log(err));
+    });
 }
 
 export function checkToken(token) {
@@ -43,6 +39,5 @@ export function checkToken(token) {
     },
   })
     .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
-    .then((data) => data.data)
-    .catch((err) => console.log(err));
+    .then((data) => data.data);
 }

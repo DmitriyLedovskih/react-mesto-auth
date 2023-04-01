@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import Main from "./Main";
@@ -12,7 +12,7 @@ import DeletePlacePopup from "./DeletePlacePopup";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
-import * as auth from "../auth";
+import * as auth from "../utils/auth";
 import ProctectedRouteElement from "./ProctectedRoute";
 import InfoTooltip from "./InfoTooltip";
 
@@ -34,6 +34,10 @@ function App() {
     email: "",
     password: "",
   });
+  const [formLoginValue, setFormLoginValue] = React.useState({
+    email: "",
+    password: "",
+  });
   const [isSuccess, setIsSuccess] = React.useState(false);
   const navigate = useNavigate();
 
@@ -42,16 +46,25 @@ function App() {
   }
 
   function handleTokenCheck() {
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      auth.checkToken(token).then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setUserEmail(res.email);
-          navigate("/");
-        }
-      });
+    const token = localStorage.getItem("token");
+    if (token) {
+      auth
+        .checkToken(token)
+        .then((res) => {
+          if (res) {
+            handleLogin();
+            setUserEmail(res.email);
+            navigate("/");
+          }
+        })
+        .catch((err) => console.log(err));
     }
+  }
+
+  function signOut() {
+    localStorage.removeItem("token");
+    navigate("/sign-in");
+    setLoggedIn(false);
   }
 
   function handleRegisterSubmit(evt) {
@@ -59,18 +72,37 @@ function App() {
     auth
       .register(formRegisterValue.email, formRegisterValue.password)
       .then((res) => {
-        if (!res.error) {
-          navigate("/sign-in");
-          setFormRegisterValue({ email: "", password: "" });
-          setIsSuccess(true);
-        } else {
-          setIsSuccess(false);
-        }
+        navigate("/sign-in");
+        setFormRegisterValue({ email: "", password: "" });
+        setIsSuccess(true);
+      })
+      .catch((err) => {
+        setIsSuccess(false);
+        console.log(err);
       })
       .finally(() => setIsInfoPopupOpen(true));
   }
 
-  React.useEffect(() => {
+  function handleLoginSubmit(evt) {
+    evt.preventDefault();
+    auth
+      .login(formLoginValue.email, formLoginValue.password)
+      .then((res) => {
+        if (res.token) {
+          setFormLoginValue({ email: "", password: "" });
+          setUserEmail(formLoginValue.email);
+          handleLogin();
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        setIsSuccess(false);
+        setIsInfoPopupOpen(true);
+        console.log(err);
+      });
+  }
+
+  function infoApi() {
     api
       .getProfileInfo()
       .then((result) => {
@@ -87,8 +119,17 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  React.useEffect(() => {
     handleTokenCheck();
   }, []);
+
+  React.useEffect(() => {
+    if (loggedIn) {
+      infoApi();
+    }
+  }, [loggedIn]);
 
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
@@ -235,11 +276,7 @@ function App() {
   return (
     <div className="App">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header
-          loggedIn={loggedIn}
-          setLoggedIn={setLoggedIn}
-          userEmail={userEmail}
-        />
+        <Header loggedIn={loggedIn} userEmail={userEmail} onSignOut={signOut} />
         <Routes>
           <Route
             path="/"
@@ -262,7 +299,7 @@ function App() {
             path="/sign-up"
             element={
               <Register
-                onRegisterSubmit={handleRegisterSubmit}
+                onRegister={handleRegisterSubmit}
                 formRegisterValue={formRegisterValue}
                 setFormRegisterValue={setFormRegisterValue}
               />
@@ -271,7 +308,11 @@ function App() {
           <Route
             path="/sign-in"
             element={
-              <Login handleLogin={handleLogin} setUserEmail={setUserEmail} />
+              <Login
+                onLogin={handleLoginSubmit}
+                formLoginValue={formLoginValue}
+                setFormLoginValue={setFormLoginValue}
+              />
             }
           />
         </Routes>
@@ -317,6 +358,8 @@ function App() {
           isOpen={isInfoPopupOpen}
           onCloseOverlay={closeByOverlay}
           isSuccess={isSuccess}
+          successText="Вы успешно зарегистрировались!"
+          unSuccessText="Что-то пошло не так! Попробуйте ещё раз."
         />
       </CurrentUserContext.Provider>
     </div>

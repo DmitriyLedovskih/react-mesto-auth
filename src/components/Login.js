@@ -1,36 +1,20 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import * as auth from "../auth";
 
-function Login({ handleLogin, setUserEmail }) {
-  const [formValue, setFormValue] = React.useState({ email: "", password: "" });
-  const navigate = useNavigate();
-
+function Login({ onLogin, formLoginValue, setFormLoginValue }) {
   function handleChange(evt) {
     const { name, value } = evt.target;
-    setFormValue({
-      ...formValue,
+    setFormLoginValue({
+      ...formLoginValue,
       [name]: value,
     });
   }
 
-  function handleSubmit(evt) {
-    evt.preventDefault();
-    auth.login(formValue.email, formValue.password).then((res) => {
-      if (res.token) {
-        setFormValue({ email: "", password: "" });
-        setUserEmail(formValue.email);
-        handleLogin();
-        navigate("/");
-      }
-    });
-  }
   return (
     <div className="auth-page">
       <h1 className="auth-page__title main-title main-title_theme_light main-title__top">
         Вход
       </h1>
-      <form className="main-form auth-page__form" onSubmit={handleSubmit}>
+      <form className="main-form auth-page__form" onSubmit={onLogin}>
         <label className="main-form__field">
           <input
             type="email"
@@ -40,7 +24,7 @@ function Login({ handleLogin, setUserEmail }) {
             required
             id="input-email"
             onChange={handleChange}
-            value={formValue.email || ""}
+            value={formLoginValue.email || ""}
           />
           <span className="main-form__error input-email-error"></span>
         </label>
@@ -53,7 +37,7 @@ function Login({ handleLogin, setUserEmail }) {
             required
             id="input-password"
             onChange={handleChange}
-            value={formValue.password || ""}
+            value={formLoginValue.password || ""}
           />
           <span className="main-form__error input-password-error"></span>
         </label>

@@ -1,18 +1,11 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import logo from "../images/logo.svg";
 
-function Header({ loggedIn, userEmail, setLoggedIn }) {
-  const [isVisible, setIsVisible] = React.useState(false);
+function Header({ loggedIn, userEmail, onSignOut }) {
+  const [isBurgerMenuVisible, setIsBurgerMenuVisible] = React.useState(false);
   function onClickBurger() {
-    setIsVisible(!isVisible);
-  }
-
-  const navigate = useNavigate();
-  function signOut() {
-    localStorage.removeItem("token");
-    navigate("/sign-in");
-    setLoggedIn(false);
+    setIsBurgerMenuVisible(!isBurgerMenuVisible);
   }
 
   return (
@@ -20,42 +13,62 @@ function Header({ loggedIn, userEmail, setLoggedIn }) {
       <Link to="/">
         <img src={logo} alt="Логотип Место" className="header__logo" />
       </Link>
-      {!loggedIn ? (
-        window.location.hash.includes("/sign-in") ? (
-          <Link to="/sign-up" className="header__link">
-            Регистрация
-          </Link>
+      <Routes>
+        {!loggedIn ? (
+          <>
+            <Route
+              path="/sign-up"
+              element={
+                <Link to="/sign-in" className="header__link">
+                  Войти
+                </Link>
+              }
+            />
+            <Route
+              path="/sign-in"
+              element={
+                <Link to="/sign-up" className="header__link">
+                  Регистрация
+                </Link>
+              }
+            />
+          </>
         ) : (
-          <Link to="/sign-in" className="header__link">
-            Войти
-          </Link>
-        )
-      ) : (
-        <>
-          <button
-            className={`burger ${isVisible ? "burger_active" : ""}`}
-            type="button"
-            onClick={onClickBurger}
-          >
-            <span
-              className={`burger__line ${
-                isVisible ? "burger__line_active" : ""
-              }`}
-            ></span>
-          </button>
-          <div
-            className={`header__user ${isVisible ? "header__user_active" : ""}`}
-          >
-            <span className="header__link">{userEmail}</span>
-            <span
-              onClick={signOut}
-              className="header__link header__link-signOut"
-            >
-              Выйти
-            </span>
-          </div>
-        </>
-      )}
+          <Route
+            path="/"
+            element={
+              <>
+                <button
+                  className={`burger ${
+                    isBurgerMenuVisible ? "burger_active" : ""
+                  }`}
+                  type="button"
+                  onClick={onClickBurger}
+                >
+                  <span
+                    className={`burger__line ${
+                      isBurgerMenuVisible ? "burger__line_active" : ""
+                    }`}
+                  ></span>
+                </button>
+                <div
+                  className={`header__user ${
+                    isBurgerMenuVisible ? "header__user_active" : ""
+                  }`}
+                >
+                  <span className="header__link">{userEmail}</span>
+                  <span
+                    onClick={onSignOut}
+                    className="header__link header__link-signOut"
+                  >
+                    Выйти
+                  </span>
+                </div>
+              </>
+            }
+          />
+        )}
+      </Routes>
     </header>
   );
 }
